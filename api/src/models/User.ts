@@ -4,9 +4,9 @@ export interface IUser extends Document {
   name: string;
   email: string;
   password: string;
-  img: string;
-  subscribers: number;
-  subscriberdUsers: string[];
+  img?: string;
+  subscribers?: number;
+  subscribersUsers?: string[];
 }
 
 const UserSchema: Schema = new Schema(
@@ -14,14 +14,13 @@ const UserSchema: Schema = new Schema(
     name: {
       type: String,
       require: true,
-      unique: true,
     },
     email: {
       type: String,
       require: true,
       unique: true,
     },
-    passwod: {
+    password: {
       type: String,
       require: true,
     },
@@ -32,7 +31,7 @@ const UserSchema: Schema = new Schema(
       type: Number,
       default: 0,
     },
-    subscriberdUsers: {
+    subscribersUsers: {
       type: [String],
       default: [],
     },
