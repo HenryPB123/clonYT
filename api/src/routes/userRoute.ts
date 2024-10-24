@@ -1,9 +1,11 @@
 import { Router } from "express";
+import { deleteUser, updateUser, getUser } from "../controllers/userControl";
+import { verifyToken } from "../utils/verifyToken";
 
 const userRoute = Router();
 
-userRoute.get("/", (req, res) => {
-  res.send("ruteandooo desde usuarios!!!!");
-});
+userRoute.put("/:id", verifyToken, updateUser);
+userRoute.delete("/:id", verifyToken, deleteUser);
+userRoute.get("/find/:id", getUser);
 
 export default userRoute;
