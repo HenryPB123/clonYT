@@ -31,11 +31,7 @@ export const signup = async (req: Request, res: Response) => {
 };
 
 //login user
-export const signin = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const signin = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
     let isCorrest: boolean = false;
@@ -56,7 +52,7 @@ export const signin = async (
       name: user?.name,
       email: user?.email,
       subscribers: user?.subscribers,
-      subscribersUsers: user?.subscribersUsers,
+      subscribedUsers: user?.subscribedUsers,
     };
 
     res

@@ -1,9 +1,6 @@
 import { Request, Response } from "express";
 import User from "../models/User";
 import mongoose from "mongoose";
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
-import dotenv from "dotenv";
 
 export const updateUser = async (req: Request, res: Response) => {
   try {
@@ -55,11 +52,44 @@ export const getUser = async (req: Request, res: Response) => {
 };
 
 export const subscribe = async (req: Request, res: Response) => {
-  res.send("Updateando");
+  const user = await User.findById(req.user?.userId);
+  if (!user) {
+    res.status(404).json({ messge: " User not found!!!!" });
+  } else {
+    try {
+      //! ojjoooo
+      await User.findByIdAndUpdate(req.user?.userId, {
+        $push: { subscribedUsers: req.params.id },
+      });
+
+      await User.findByIdAndUpdate(req.params.id, {
+        $inc: { subscribers: 1 },
+      });
+      res.status(200).json({ message: "Subsciption successfull!!!!!!!!" });
+    } catch (error) {
+      console.log(error);
+    }
+  }
 };
 
 export const unsubscribe = async (req: Request, res: Response) => {
-  res.send("Updateando");
+  const user = await User.findById(req.user?.userId);
+  if (!user) {
+    res.status(404).json({ messge: " User not found!!!!" });
+  } else {
+    try {
+      await User.findByIdAndUpdate(req.user?.userId, {
+        $pull: { subscribedUsers: req.params.id },
+      });
+
+      await User.findByIdAndUpdate(req.params.id, {
+        $inc: { subscribers: -1 },
+      });
+      res.status(200).json({ message: "Unsubsciption successfull!!!!!!!!" });
+    } catch (error) {
+      console.log(error);
+    }
+  }
 };
 
 export const like = async (req: Request, res: Response) => {

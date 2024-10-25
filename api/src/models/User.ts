@@ -6,7 +6,7 @@ export interface IUser extends Document {
   password: string;
   img?: string;
   subscribers?: number;
-  subscribersUsers?: string[];
+  subscribedUsers?: string[];
 }
 
 const UserSchema: Schema = new Schema(
@@ -34,7 +34,7 @@ const UserSchema: Schema = new Schema(
       type: Number,
       default: 0,
     },
-    subscribersUsers: {
+    subscribedUsers: {
       type: [String],
       default: [],
     },

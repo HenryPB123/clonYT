@@ -23,7 +23,7 @@ const VideoSchema: Schema = new Schema(
       require: true,
     },
     description: {
-      type: Text,
+      type: String,
       require: true,
     },
     imgUrl: {
@@ -36,7 +36,7 @@ const VideoSchema: Schema = new Schema(
     },
     views: {
       type: Number,
-      default: true,
+      default: 0,
     },
     tags: {
       type: [String],
