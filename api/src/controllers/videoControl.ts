@@ -31,7 +31,7 @@ export const updateVideo = async (req: Request, res: Response) => {
       );
       res.status(200).json({
         message: "Video has been udpated successfully!!!",
-        updateVideo,
+        updatedVideo,
       });
     } else {
       res.status(400).json({ message: "You can update only your video!!!" });
@@ -105,7 +105,7 @@ export const trend = async (req: Request, res: Response) => {
 
 export const ramdom = async (req: Request, res: Response) => {
   try {
-    const videos = await Video.aggregate([{ $sample: { size: 40 } }]);
+    const videos = await Video.aggregate([{ $sample: { size: 40 } }]); //{ $sample: { size: 2 } } me dice cuántos videos muestro
     if (!videos) {
       res.status(404).json({ message: "There is not videos!!!" });
     } else {
@@ -121,19 +121,58 @@ export const subscriptions = async (req: Request, res: Response) => {
   try {
     const user = await User.findById(req.user?.userId);
     const subscribedChannels = user?.subscribedUsers;
-
-    if (subscribedChannels && subscribedChannels?.length > 0) {
-      const list = await Promise.all(
-        subscribedChannels?.map((chanId) => {
-          return Video.find({ id: chanId });
+    let list: object[] = [];
+    if (subscribedChannels) {
+      list = await Promise.all(
+        subscribedChannels.map((channelId) => {
+          return Video.find({ userId: channelId });
         })
       );
+    }
 
-      if (!list) {
-        res.status(404).json({ message: "There is not subcriptions" });
+    if (!list) {
+      res.status(400).json({ message: "Unavailable vidoes!!!" });
+    } else {
+      res
+        .status(200)
+        .json(list.flat().sort((a: any, b: any) => b.createdAt - a.createdAt)); //esta línea de código muestra un array sin anidaciones, además los ordena del más reciente creado al último.
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ error: (error as any).message });
+  }
+};
+
+export const getByTag = async (req: Request, res: Response) => {
+  if (typeof req.query.tags === "string") {
+    const tags = req.query.tags.split(",");
+
+    try {
+      const videos = await Video.find({ tags: { $in: tags } }).limit(20);
+      if (videos.length === 0) {
+        res
+          .status(404)
+          .json({ message: "There are no videos whit this or thesse tags!!!" });
       } else {
-        res.status(200).json(list);
+        res.status(200).json(videos);
       }
+    } catch (error) {
+      console.log(error);
+      res.status(400).json({ error: (error as any).message });
+    }
+  }
+};
+
+export const search = async (req: Request, res: Response) => {
+  const word = req.query.word;
+  try {
+    const videos = await Video.find({
+      title: { $regex: word, $options: "i" },
+    }).limit(40);
+    if (videos.length === 0) {
+      res.status(404).json({ message: "There are no videos!!!" });
+    } else {
+      res.status(200).json(videos);
     }
   } catch (error) {
     console.log(error);

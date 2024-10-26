@@ -7,7 +7,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 interface JwtPayload {
-  userId: string;
+  userId?: string;
 }
 
 export const verifyToken = (
@@ -25,7 +25,7 @@ export const verifyToken = (
         process.env.SECRET as string
       ) as unknown as JwtPayload;
 
-      req.user = user;
+      (req.user as any) = user;
     }
     next();
   } catch (error) {

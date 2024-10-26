@@ -1,0 +1,18 @@
+/* Resetea márgenes y rellenos para todos los elementos */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box; /* Esto ayuda a que los tamaños sean más predecibles */
+}
+
+/* Resetea estilos para el body */
+body {
+  margin: 0; /* Asegura que no haya margen en el body */
+  padding: 0; /* Asegura que no haya relleno en el body */
+  font-family: Arial, sans-serif; /* Establece una fuente básica */
+  line-height: 1.5; /* Establece una altura de línea razonable */
+  background-color: #fff; /* Color de fondo blanco (puedes cambiarlo) */
+  color: #333; /* Color del texto (puedes cambiarlo) */
+}

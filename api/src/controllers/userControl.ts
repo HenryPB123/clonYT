@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import User from "../models/User";
 import mongoose from "mongoose";
+import Video from "../models/Video";
 
 export const updateUser = async (req: Request, res: Response) => {
   try {
@@ -57,7 +58,6 @@ export const subscribe = async (req: Request, res: Response) => {
     res.status(404).json({ messge: " User not found!!!!" });
   } else {
     try {
-      //! ojjoooo
       await User.findByIdAndUpdate(req.user?.userId, {
         $push: { subscribedUsers: req.params.id },
       });
@@ -92,10 +92,32 @@ export const unsubscribe = async (req: Request, res: Response) => {
   }
 };
 
-export const like = async (req: Request, res: Response) => {
-  res.send("Updateando");
+export const likes = async (req: Request, res: Response) => {
+  const id = req.user?.userId;
+  const videoId = req.params.videoId;
+  try {
+    await Video.findByIdAndUpdate(videoId, {
+      $addToSet: { likes: id },
+      $pull: { dislikes: id },
+    });
+    res.status(200).json({ message: "The video has bben liked!!!!!!!!" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: (error as any).message });
+  }
 };
 
-export const dislike = async (req: Request, res: Response) => {
-  res.send("Updateando");
+export const dislikes = async (req: Request, res: Response) => {
+  const id = req.user?.userId;
+  const videoId = req.params.videoId;
+  try {
+    await Video.findByIdAndUpdate(videoId, {
+      $addToSet: { dislikes: id },
+      $pull: { likes: id },
+    });
+    res.status(200).json({ message: "The video has bben disliked!!!!!!!!" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: (error as any).message });
+  }
 };

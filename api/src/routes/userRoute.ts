@@ -5,6 +5,8 @@ import {
   getUser,
   subscribe,
   unsubscribe,
+  likes,
+  dislikes,
 } from "../controllers/userControl";
 import { verifyToken } from "../utils/verifyToken";
 
@@ -15,5 +17,7 @@ userRoute.delete("/:id", verifyToken, deleteUser);
 userRoute.get("/find/:id", getUser);
 userRoute.put("/subs/:id", verifyToken, subscribe);
 userRoute.put("/unsubs/:id", verifyToken, unsubscribe);
+userRoute.put("/likes/:videoId", verifyToken, likes);
+userRoute.put("/dislikes/:videoId", verifyToken, dislikes);
 
 export default userRoute;

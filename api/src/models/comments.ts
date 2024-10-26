@@ -17,7 +17,7 @@ const CommentSchema: Schema = new Schema(
       require: true,
     },
     description: {
-      type: Text,
+      type: String,
       require: true,
     },
   },
@@ -26,6 +26,6 @@ const CommentSchema: Schema = new Schema(
   }
 );
 
-const Comment = mongoose.model<IComment>("Video", CommentSchema);
+const Comment = mongoose.model<IComment>("Comment", CommentSchema);
 
 export default Comment;
