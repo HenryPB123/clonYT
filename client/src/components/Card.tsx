@@ -2,31 +2,48 @@ import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
-const Container = styled.div`
-  width: 360px;
-  margin-bottom: 45px;
+// Crear interface con las props que mi componente necesita recibir de App
+interface CardProps {
+  type: string;
+}
+
+const Container = styled.div.attrs<CardProps>((props) => ({
+  datatype: props.type,
+}))`
+  width: ${(props) => props["datatype"] !== "sm" && "360px"};
+  margin-bottom: ${(props) => (props["datatype"] === "sm" ? "10px" : "45px")};
   cursor: pointer;
+  display: ${(props) => props["datatype"] === "sm" && "flex"};
+  gap: 10px;
 `;
 
-const Image = styled.img`
+const Image = styled.img.attrs<CardProps>((props) => ({
+  datatype: props.type,
+}))`
   width: 100%;
-  height: 202px;
+  height: ${(props) => (props["datatype"] === "sm" ? "120px" : "202px")};
   background-color: #999;
+  flex: 1;
 `;
 
-const Details = styled.div`
+const Details = styled.div.attrs<CardProps>((props) => ({
+  datatype: props.type,
+}))`
   display: flex;
-  margin-top: 16px;
+  margin-top: ${(props) => props["datatype"] !== "sm" && "16px"};
   gap: 12px;
-  display: flex;
   align-items: center;
+  flex: 1;
 `;
 
-const ChannelImage = styled.img`
+const ChannelImage = styled.img.attrs<CardProps>((props) => ({
+  datatype: props.type,
+}))`
   width: 36px;
   height: 36px;
   border-radius: 50%;
   object-fit: cover;
+  display: ${(props) => props["datatype"] === "sm" && "none"};
 `;
 
 const Texts = styled.div``;
@@ -47,13 +64,19 @@ const Info = styled.div`
   color: ${({ theme }) => theme.textSoft};
 `;
 
-const Card = () => {
+const Card: React.FC<CardProps> = ({ type }) => {
   return (
     <Link to="/video/test" style={{ textDecoration: "none" }}>
-      <Container>
-        <Image src="https://images.pexels.com/photos/20716648/pexels-photo-20716648/free-photo-of-telefono-inteligente-tecnologia-logo-pantalla-tactil.jpeg?auto=compress&cs=tinysrgb&w=800" />
-        <Details>
-          <ChannelImage src="https://images.pexels.com/photos/4480519/pexels-photo-4480519.jpeg?auto=compress&cs=tinysrgb&w=800" />
+      <Container type={type}>
+        <Image
+          type={type}
+          src="https://images.pexels.com/photos/20716648/pexels-photo-20716648/free-photo-of-telefono-inteligente-tecnologia-logo-pantalla-tactil.jpeg?auto=compress&cs=tinysrgb&w=800"
+        />
+        <Details type={type}>
+          <ChannelImage
+            type={type}
+            src="https://images.pexels.com/photos/4480519/pexels-photo-4480519.jpeg?auto=compress&cs=tinysrgb&w=800"
+          />
 
           <Texts>
             <Title>Name Video</Title>

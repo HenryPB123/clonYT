@@ -11,16 +11,16 @@ const Container = styled.div`
 const Home = () => {
   return (
     <Container>
-      <Card />
-      <Card />
-      <Card />
-      <Card />
-      <Card />
-      <Card />
-      <Card />
-      <Card />
-      <Card />
-      <Card />
+      <Card type="" />
+      <Card type="" />
+      <Card type="" />
+      <Card type="" />
+      <Card type="" />
+      <Card type="" />
+      <Card type="" />
+      <Card type="" />
+      <Card type="" />
+      <Card type="" />
     </Container>
   );
 };

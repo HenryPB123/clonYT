@@ -4,6 +4,8 @@ import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
 import ThumbDownOffAltTwoToneIcon from "@mui/icons-material/ThumbDownOffAltTwoTone";
 import ReplyTwoToneIcon from "@mui/icons-material/ReplyTwoTone";
 import AddTaskTwoToneIcon from "@mui/icons-material/AddTaskTwoTone";
+import Comments from "../components/Comments";
+import Card from "../components/Card";
 
 const Container = styled.div`
   display: flex;
@@ -54,6 +56,55 @@ const Recomendation = styled.div`
   flex: 2;
 `;
 
+const Channel = styled.div`
+  display: flex;
+
+  justify-content: space-between;
+`;
+
+const ChannelInfo = styled.div`
+  display: flex;
+  gap: 20px;
+`;
+
+const Image = styled.img`
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+`;
+
+const ChannelDetail = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  color: ${({ theme }) => theme.text};
+`;
+const ChannelName = styled.span`
+  font-weight: 500;
+`;
+const ChannelCounter = styled.span`
+  margin-top: 5px;
+  margin-bottom: 20px;
+  color: ${({ theme }) => theme.textSoft};
+  font-size: 12px;
+`;
+
+const Description = styled.p`
+  font-size: 14px;
+`;
+
+const Subscribe = styled.button`
+  background-color: #cc1a00;
+  font-weight: 500;
+  color: White;
+  border: none;
+  border-radius: 3px;
+  height: max-content;
+  padding: 10px 20px;
+  cursor: pointer;
+`;
+
 const Video = () => {
   return (
     <Container>
@@ -62,7 +113,7 @@ const Video = () => {
           <VideoWrapper>
             <iframe
               width="100%"
-              height="315"
+              height="500px"
               src="https://www.youtube.com/embed/yIaXoop8gl4?si=4ke7i7_ZZO6N1uvI"
               title="YouTube video player"
               frameBorder="0"
@@ -95,9 +146,39 @@ const Video = () => {
             </Buttons>
           </Details>
           <Hr />
+          <Channel>
+            <ChannelInfo>
+              <Image src="https://images.pexels.com/photos/4480519/pexels-photo-4480519.jpeg?auto=compress&cs=tinysrgb&w=800" />
+
+              <ChannelDetail>
+                <ChannelName>Channel Name</ChannelName>
+                <ChannelCounter>500K Subscribers</ChannelCounter>
+                <Description>
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                  Quidem dignissimos earum pariatur exercitationem, assumenda
+                  non necessitatibus reprehenderit impedit et accusantium.
+                </Description>
+              </ChannelDetail>
+            </ChannelInfo>
+            <Subscribe>Subscribe</Subscribe>
+          </Channel>
+          <Hr />
+          <Comments />
         </Content>
       </Content>
-      <Recomendation>Recomendation</Recomendation>
+      <Recomendation>
+        <Card type="sm" />
+        <Card type="sm" />
+        <Card type="sm" />
+        <Card type="sm" />
+        <Card type="sm" />
+        <Card type="sm" />
+        <Card type="sm" />
+        <Card type="sm" />
+        <Card type="sm" />
+        <Card type="sm" />
+        <Card type="sm" />
+      </Recomendation>
     </Container>
   );
 };
