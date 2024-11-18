@@ -1,13 +1,38 @@
-import React from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { format } from "timeago.js";
 
 // Crear interface con las props que mi componente necesita recibir de App
 interface CardProps {
   type: string;
+  video: {
+    _id: string;
+    userId: string;
+    title: string;
+    description: string;
+    imgUrl: string;
+    videoUrl: string;
+    views: number;
+    tags: string[];
+    likes: string[];
+    dislikes: string[];
+    createdAt: string;
+  };
+}
+interface ItemProp {
+  type: string;
+}
+interface Channel {
+  _id: string;
+  name: string;
+  email: string;
+  subscribers: number;
+  image: string;
 }
 
-const Container = styled.div.attrs<CardProps>((props) => ({
+const Container = styled.div.attrs<ItemProp>((props) => ({
   datatype: props.type,
 }))`
   width: ${(props) => props["datatype"] !== "sm" && "360px"};
@@ -17,7 +42,7 @@ const Container = styled.div.attrs<CardProps>((props) => ({
   gap: 10px;
 `;
 
-const Image = styled.img.attrs<CardProps>((props) => ({
+const Image = styled.img.attrs<ItemProp>((props) => ({
   datatype: props.type,
 }))`
   width: 100%;
@@ -26,7 +51,7 @@ const Image = styled.img.attrs<CardProps>((props) => ({
   flex: 1;
 `;
 
-const Details = styled.div.attrs<CardProps>((props) => ({
+const Details = styled.div.attrs<ItemProp>((props) => ({
   datatype: props.type,
 }))`
   display: flex;
@@ -36,7 +61,7 @@ const Details = styled.div.attrs<CardProps>((props) => ({
   flex: 1;
 `;
 
-const ChannelImage = styled.img.attrs<CardProps>((props) => ({
+const ChannelImage = styled.img.attrs<ItemProp>((props) => ({
   datatype: props.type,
 }))`
   width: 36px;
@@ -64,24 +89,33 @@ const Info = styled.div`
   color: ${({ theme }) => theme.textSoft};
 `;
 
-const Card: React.FC<CardProps> = ({ type }) => {
+const Card: React.FC<CardProps> = ({ type, video }) => {
+  const [channel, setChannel] = useState<Channel | null>(null);
+
+  useEffect(() => {
+    const fetchChannel = async () => {
+      const res = await axios.get(
+        `http://localhost:3000/api/users/find/${video.userId}`
+      );
+      setChannel(res.data);
+      console.log("data", res.data);
+    };
+
+    fetchChannel();
+  }, [video.userId]);
   return (
     <Link to="/video/test" style={{ textDecoration: "none" }}>
       <Container type={type}>
-        <Image
-          type={type}
-          src="https://images.pexels.com/photos/20716648/pexels-photo-20716648/free-photo-of-telefono-inteligente-tecnologia-logo-pantalla-tactil.jpeg?auto=compress&cs=tinysrgb&w=800"
-        />
+        <Image type={type} src={video.imgUrl} />
         <Details type={type}>
-          <ChannelImage
-            type={type}
-            src="https://images.pexels.com/photos/4480519/pexels-photo-4480519.jpeg?auto=compress&cs=tinysrgb&w=800"
-          />
+          <ChannelImage type={type} src={channel?.image} />
 
           <Texts>
-            <Title>Name Video</Title>
-            <ChannelName>Channel Name</ChannelName>
-            <Info>660.625 views ° 1 day ago</Info>
+            <Title>{video.title}</Title>
+            <ChannelName>{channel?.name}</ChannelName>
+            <Info>
+              {video.views} views - {format(video.createdAt)}
+            </Info>
           </Texts>
         </Details>
       </Container>

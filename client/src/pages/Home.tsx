@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Card from "../components/Card";
+import axios from "axios";
 
 const Container = styled.div`
   display: flex;
@@ -8,19 +9,42 @@ const Container = styled.div`
   flex-wrap: wrap;
 `;
 
-const Home = () => {
+interface HomeProps {
+  type: string;
+}
+
+interface Video {
+  _id: string;
+  userId: string;
+  title: string;
+  description: string;
+  imgUrl: string;
+  videoUrl: string;
+  views: number;
+  tags: string[];
+  likes: string[];
+  dislikes: string[];
+  createdAt: string;
+}
+
+const Home: React.FC<HomeProps> = ({ type }) => {
+  const [videos, setVideos] = useState([]);
+
+  useEffect(() => {
+    const fetchVideos = async () => {
+      const res = await axios.get(`http://localhost:3000/api/videos/${type}`);
+      setVideos(res.data);
+      // console.log("data", res.data);
+    };
+
+    fetchVideos();
+  }, [type]);
+
   return (
     <Container>
-      <Card type="" />
-      <Card type="" />
-      <Card type="" />
-      <Card type="" />
-      <Card type="" />
-      <Card type="" />
-      <Card type="" />
-      <Card type="" />
-      <Card type="" />
-      <Card type="" />
+      {videos?.map((video: Video) => (
+        <Card key={video._id} type="" video={video} />
+      ))}
     </Container>
   );
 };
