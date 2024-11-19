@@ -98,7 +98,7 @@ const Card: React.FC<CardProps> = ({ type, video }) => {
         `http://localhost:3000/api/users/find/${video.userId}`
       );
       setChannel(res.data);
-      console.log("data", res.data);
+      // console.log("data", res.data);
     };
 
     fetchChannel();

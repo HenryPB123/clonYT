@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useState } from "react";
 import styled from "styled-components";
 
@@ -31,6 +32,7 @@ const SubTitle = styled.h2`
 
 const Input = styled.input`
   border: 1px solid ${({ theme }) => theme.soft};
+  color: ${({ theme }) => theme.text};
   border-radius: 3px;
   padding: 10px;
   background-color: transparent;
@@ -67,21 +69,31 @@ const Signin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const handleLogin = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    try {
+      const res = await axios.post("http://localhost:3000/api/auth/signin", {
+        email,
+        password,
+      });
+      console.log(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <Container>
       <Wrapper>
         <Title>Sign In</Title>
         <SubTitle>to continue to ClonTube</SubTitle>
-        <Input
-          placeholder="Username"
-          onChange={(e) => setName(e.target.value)}
-        />
+        <Input placeholder="Email" onChange={(e) => setEmail(e.target.value)} />
         <Input
           type="password"
           placeholder="Password"
           onChange={(e) => setPassword(e.target.value)}
         />
-        <Button>Sign In</Button>
+        <Button onClick={handleLogin}>Sign In</Button>
         <Title>or</Title>
         <Input
           placeholder="Username"
