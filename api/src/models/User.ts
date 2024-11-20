@@ -4,7 +4,7 @@ export interface IUser extends Document {
   name: string;
   email: string;
   password: string;
-  img?: string;
+  img: string;
   subscribers?: number;
   subscribedUsers?: string[];
 }
@@ -29,6 +29,8 @@ const UserSchema: Schema = new Schema(
     },
     img: {
       type: String,
+      default:
+        "https://images.pexels.com/photos/6787808/pexels-photo-6787808.jpeg?auto=compress&cs=tinysrgb&w=800",
     },
     subscribers: {
       type: Number,

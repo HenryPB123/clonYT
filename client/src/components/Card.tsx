@@ -5,9 +5,10 @@ import styled from "styled-components";
 import { format } from "timeago.js";
 
 // Crear interface con las props que mi componente necesita recibir de App
+
 interface CardProps {
   type: string;
-  video: {
+  video?: {
     _id: string;
     userId: string;
     title: string;
@@ -18,7 +19,7 @@ interface CardProps {
     tags: string[];
     likes: string[];
     dislikes: string[];
-    createdAt: string;
+    createdAt: Date;
   };
 }
 interface ItemProp {
@@ -95,26 +96,27 @@ const Card: React.FC<CardProps> = ({ type, video }) => {
   useEffect(() => {
     const fetchChannel = async () => {
       const res = await axios.get(
-        `http://localhost:3000/api/users/find/${video.userId}`
+        `http://localhost:3000/api/users/find/${video?.userId}`
       );
       setChannel(res.data);
       // console.log("data", res.data);
     };
 
     fetchChannel();
-  }, [video.userId]);
+  }, [video?.userId]);
   return (
     <Link to="/video/test" style={{ textDecoration: "none" }}>
       <Container type={type}>
-        <Image type={type} src={video.imgUrl} />
+        <Image type={type} src={video?.imgUrl} />
         <Details type={type}>
           <ChannelImage type={type} src={channel?.image} />
 
           <Texts>
-            <Title>{video.title}</Title>
+            <Title>{video?.title}</Title>
             <ChannelName>{channel?.name}</ChannelName>
             <Info>
-              {video.views} views - {format(video.createdAt)}
+              {video?.views} views -{" "}
+              {format(video ? video.createdAt : new Date())}
             </Info>
           </Texts>
         </Details>

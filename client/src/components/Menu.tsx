@@ -17,6 +17,9 @@ import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import SettingsBrightnessOutlinedIcon from "@mui/icons-material/SettingsBrightnessOutlined";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import { Link } from "react-router-dom";
+import { RootState } from "../redux/store";
+import { useSelector } from "react-redux";
+import { VideoCallOutlined } from "@mui/icons-material";
 
 const Container = styled.div`
   flex: 1;
@@ -91,6 +94,8 @@ interface MenuProps {
 }
 
 const Menu: React.FC<MenuProps> = ({ darkMode, setDarkMode }) => {
+  const currentUser = useSelector((state: RootState) => state.user.currentUser);
+
   return (
     <Container>
       <Wrapper>
@@ -123,19 +128,23 @@ const Menu: React.FC<MenuProps> = ({ darkMode, setDarkMode }) => {
         <Item>
           <HistoryOutlinedIcon /> History
         </Item>
-        <Hr />
-        <Login>
-          Sign in to like videos, comment and subscribe.
-          <Link
-            to="signin"
-            style={{ textDecoration: "none", color: "inherit" }}
-          >
-            <Button>
-              <AccountCircleOutlinedIcon />
-              SIGN IN
-            </Button>
-          </Link>
-        </Login>
+        {!currentUser && (
+          <>
+            <Hr />
+            <Login>
+              Sign in to like videos, comment and subscribe.
+              <Link
+                to="signin"
+                style={{ textDecoration: "none", color: "inherit" }}
+              >
+                <Button>
+                  <AccountCircleOutlinedIcon />
+                  SIGN IN
+                </Button>
+              </Link>
+            </Login>
+          </>
+        )}
         <Hr />
         <Title>Best of ClonTube</Title>
         <Item>
