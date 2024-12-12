@@ -129,17 +129,16 @@ export const subscriptions = async (req: Request, res: Response) => {
         })
       );
     }
+    const flatList = list.flat();
 
-    if (!list) {
-      res.status(400).json({ message: "Unavailable vidoes!!!" });
-    } else {
+    if (flatList.length > 0) {
       res
         .status(200)
-        .json(list.flat().sort((a: any, b: any) => b.createdAt - a.createdAt)); //esta línea de código muestra un array sin anidaciones, además los ordena del más reciente creado al último.
+        .json(flatList.sort((a: any, b: any) => b.createdAt - a.createdAt)); //esta línea de código muestra un array sin anidaciones, además los ordena del más reciente creado al último.
     }
   } catch (error) {
     console.log(error);
-    res.status(400).json({ error: (error as any).message });
+    res.status(500).json({ message: "Internal Server Error", error });
   }
 };
 

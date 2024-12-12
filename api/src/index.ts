@@ -12,8 +12,19 @@ const PORT = 3000;
 //Connection
 connectDB();
 app.use(express.json());
+// app.use(
+//   cors({
+//     origin: "http://localhost:5173",
+//     methods: ["GET", "POST"],
+//     credentials: true,
+//   })
+// );
 app.use(cors());
 app.use(cookieParser());
+app.use((req, res, next) => {
+  res.setHeader("Cross-Origin-Opener-Policy", "same-origin-allow-popups");
+  next();
+});
 
 app.use("/api", router);
 
