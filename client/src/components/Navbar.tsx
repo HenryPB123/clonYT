@@ -3,9 +3,13 @@ import styled from "styled-components";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { VideoCallOutlined } from "@mui/icons-material";
+import LogoutIcon from "@mui/icons-material/Logout";
+import { signOut } from "firebase/auth";
+import { loginSuccess } from "../redux/userSlice";
+import { auth, provider } from "../firebase";
 
 const Container = styled.div`
   position: sticky;
@@ -54,6 +58,18 @@ const Button = styled.button`
   align-items: center;
   gap: 7.5px;
 `;
+const ButtonOut = styled.button`
+  padding: 5px;
+  background-color: transparent;
+  border: 1px solid ${({ theme }) => theme.text};
+  color: ${({ theme }) => theme.text};
+  border-radius: 3px;
+  font-weight: 400;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+`;
 
 const User = styled.div`
   display: flex;
@@ -71,7 +87,19 @@ const Avatar = styled.img`
 `;
 
 const Navbar = () => {
+  const dispatch = useDispatch();
+
   const currentUser = useSelector((state: RootState) => state.user.currentUser);
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth); // Cierra la sesión en Firebase
+      dispatch(loginSuccess(null)); // Actualiza el estado en Redux
+      console.log("Sesión cerrada exitosamente");
+    } catch (error) {
+      console.error("Error al cerrar sesión:", error);
+    }
+  };
 
   return (
     <Container>
@@ -85,6 +113,10 @@ const Navbar = () => {
             <VideoCallOutlined />
             <Avatar src={currentUser.img} />
             {currentUser.name}
+            <ButtonOut onClick={handleLogout}>
+              <LogoutIcon />
+              LOGOUT
+            </ButtonOut>
           </User>
         ) : (
           <Link

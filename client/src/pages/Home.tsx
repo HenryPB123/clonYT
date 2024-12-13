@@ -24,7 +24,7 @@ interface Video {
   tags: string[];
   likes: string[];
   dislikes: string[];
-  createdAt: string;
+  createdAt: Date;
 }
 
 const Home: React.FC<HomeProps> = ({ type }) => {

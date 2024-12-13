@@ -105,23 +105,25 @@ const Card: React.FC<CardProps> = ({ type, video }) => {
     fetchChannel();
   }, [video?.userId]);
   return (
-    <Link to="/video/test" style={{ textDecoration: "none" }}>
-      <Container type={type}>
-        <Image type={type} src={video?.imgUrl} />
-        <Details type={type}>
-          <ChannelImage type={type} src={channel?.image} />
+    video && (
+      <Link to={`/video/${video?._id}`} style={{ textDecoration: "none" }}>
+        <Container type={type}>
+          <Image type={type} src={video?.imgUrl} />
+          <Details type={type}>
+            <ChannelImage type={type} src={channel?.image} />
 
-          <Texts>
-            <Title>{video?.title}</Title>
-            <ChannelName>{channel?.name}</ChannelName>
-            <Info>
-              {video?.views} views -{" "}
-              {format(video ? video.createdAt : new Date())}
-            </Info>
-          </Texts>
-        </Details>
-      </Container>
-    </Link>
+            <Texts>
+              <Title>{video?.title}</Title>
+              <ChannelName>{channel?.name}</ChannelName>
+              <Info>
+                {video?.views} views -{" "}
+                {format(video ? video.createdAt : new Date())}
+              </Info>
+            </Texts>
+          </Details>
+        </Container>
+      </Link>
+    )
   );
 };
 

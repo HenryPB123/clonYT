@@ -44,7 +44,8 @@ const Logo = styled.div`
 `;
 
 const Img = styled.img`
-  height: 25px;
+  height: 20px;
+  border-radius: 5px;
 `;
 
 const Item = styled.div`
@@ -101,7 +102,7 @@ const Menu: React.FC<MenuProps> = ({ darkMode, setDarkMode }) => {
       <Wrapper>
         <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
           <Logo>
-            <Img src="https://static.vecteezy.com/system/resources/thumbnails/023/986/704/small_2x/youtube-logo-youtube-logo-transparent-youtube-icon-transparent-free-free-png.png" />
+            <Img src="https://goodly.co.in/wp-content/uploads/2023/10/youtube-logo-png-46016-1.png" />
             ClonTube
           </Logo>
         </Link>

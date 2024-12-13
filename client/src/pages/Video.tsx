@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
 import ThumbDownOffAltTwoToneIcon from "@mui/icons-material/ThumbDownOffAltTwoTone";
@@ -6,6 +6,12 @@ import ReplyTwoToneIcon from "@mui/icons-material/ReplyTwoTone";
 import AddTaskTwoToneIcon from "@mui/icons-material/AddTaskTwoTone";
 import Comments from "../components/Comments";
 import Card from "../components/Card";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../redux/store";
+import { useLocation } from "react-router-dom";
+import axios from "axios";
+import { fetchFailure, fetchSuccess } from "../redux/videoSlice";
+import { format } from "timeago.js";
 
 const Container = styled.div`
   display: flex;
@@ -105,7 +111,51 @@ const Subscribe = styled.button`
   cursor: pointer;
 `;
 
+type Channel = {
+  _id: string;
+  name: string;
+  email: string;
+  img: string;
+  subscribers: number;
+  subscribersUsers: string[];
+  createdAt: Date;
+};
+
 const Video = () => {
+  const currentUser = useSelector((state: RootState) => state.user.currentUser);
+  const currentVideo = useSelector(
+    (state: RootState) => state.video.currentVideo
+  );
+  const dispatch = useDispatch();
+
+  const path = useLocation();
+  const idVideo = path.pathname.split("/").pop();
+
+  const [channel, setChannel] = useState<Channel | null>(null);
+  console.log("channelllllllll", channel);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const videoRes = await axios.get(
+          `http://localhost:3000/api/videos/find/${idVideo}`
+        );
+
+        const channelRes = await axios.get(
+          `http://localhost:3000/api/users/find/${videoRes.data.userId}`
+        );
+        console.log("channelisima", channelRes.data);
+
+        setChannel(channelRes.data);
+
+        dispatch(fetchSuccess(videoRes.data));
+      } catch (error) {
+        dispatch(fetchFailure(error));
+      }
+    };
+    fetchData();
+  }, [idVideo, dispatch]);
+
   return (
     <Container>
       <Content>
@@ -122,14 +172,15 @@ const Video = () => {
               allowFullScreen
             ></iframe>
           </VideoWrapper>
-          <Title>
-            React Video Sharing App UI Design | Youtube UI Clone with React
-          </Title>
+          <Title>{currentVideo.title}</Title>
           <Details>
-            <Info>100 K visualizaciones hace 2 años</Info>
+            <Info>
+              {currentVideo.views} K visualizaciones{" "}
+              {format(currentVideo.createdAt)}
+            </Info>
             <Buttons>
               <Button>
-                <ThumbUpOffAltIcon /> 123
+                <ThumbUpOffAltIcon /> {currentVideo.likes?.lengt}
               </Button>
               <Button>
                 <ThumbDownOffAltTwoToneIcon />
@@ -148,16 +199,14 @@ const Video = () => {
           <Hr />
           <Channel>
             <ChannelInfo>
-              <Image src="https://images.pexels.com/photos/4480519/pexels-photo-4480519.jpeg?auto=compress&cs=tinysrgb&w=800" />
+              <Image src={channel?.img} />
 
               <ChannelDetail>
-                <ChannelName>Channel Name</ChannelName>
-                <ChannelCounter>500K Subscribers</ChannelCounter>
-                <Description>
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Quidem dignissimos earum pariatur exercitationem, assumenda
-                  non necessitatibus reprehenderit impedit et accusantium.
-                </Description>
+                <ChannelName>{channel?.name}</ChannelName>
+                <ChannelCounter>
+                  {channel?.subscribers} Subscribers
+                </ChannelCounter>
+                <Description>{currentVideo.description}</Description>
               </ChannelDetail>
             </ChannelInfo>
             <Subscribe>Subscribe</Subscribe>
@@ -166,7 +215,7 @@ const Video = () => {
           <Comments />
         </Content>
       </Content>
-      <Recomendation>
+      {/* <Recomendation>
         <Card type="sm" />
         <Card type="sm" />
         <Card type="sm" />
@@ -178,7 +227,7 @@ const Video = () => {
         <Card type="sm" />
         <Card type="sm" />
         <Card type="sm" />
-      </Recomendation>
+      </Recomendation> */}
     </Container>
   );
 };

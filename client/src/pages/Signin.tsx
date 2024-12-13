@@ -1,11 +1,18 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import { loginFailure, loginStart, loginSuccess } from "../redux/userSlice";
-import { Navigate, redirect } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
+import { auth, provider } from "../firebase";
+import {
+  getRedirectResult,
+  signInWithPopup,
+  signInWithRedirect,
+  signOut,
+} from "firebase/auth";
 
 const Container = styled.div`
   display: flex;
@@ -90,6 +97,24 @@ const Signin = () => {
     }
   };
 
+  const signInWithGoogle = () => {
+    dispatch(loginStart());
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        return axios.post("http://localhost:3000/api/auth/google", {
+          name: result.user.displayName,
+          email: result.user.email,
+          img: result.user.photoURL,
+        });
+      })
+      .then((res) => {
+        dispatch(loginSuccess(res.data));
+      })
+      .catch((error) => {
+        dispatch(loginFailure(error));
+      });
+  };
+
   return (
     <Container>
       {currentUser && <Navigate to="/" replace={true} />}
@@ -103,6 +128,8 @@ const Signin = () => {
           onChange={(e) => setPassword(e.target.value)}
         />
         <Button onClick={handleLogin}>Sign In</Button>
+        <Title>or</Title>
+        <Button onClick={signInWithGoogle}>Signin with Google</Button>
         <Title>or</Title>
         <Input
           placeholder="Username"
